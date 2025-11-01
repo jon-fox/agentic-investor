@@ -13,7 +13,18 @@ from mcp.server.fastmcp import FastMCP
 from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception, after_log
 from yfinance.exceptions import YFRateLimitError
 
+from .services.tool_service import ToolService
+from .tools.crypto_fear_greed import CryptoFearGreedTool
+from .tools.google_trends import GoogleTrendsTool
+
 mcp = FastMCP("Investor-Agent", dependencies=["yfinance", "pandas", "pytrends"])
+
+# Initialize tool service and register tools
+tool_service = ToolService()
+tool_service.register_tools([
+    CryptoFearGreedTool(),
+    GoogleTrendsTool(),
+])
 
 # Configure pandas
 pd.set_option('future.no_silent_downcasting', True)
@@ -242,47 +253,6 @@ async def get_cnn_fear_greed_index(
         result = {k: v for k, v in result.items() if k in indicators}
 
     return result
-
-@mcp.tool()
-async def get_crypto_fear_greed_index() -> dict:
-    CRYPTO_FEAR_GREED_URL = "https://api.alternative.me/fng/"
-
-    data = await fetch_json(CRYPTO_FEAR_GREED_URL)
-    if "data" not in data or not data["data"]:
-        raise ValueError("Invalid response format from alternative.me API")
-
-    current_data = data["data"][0]
-    return {
-        "value": current_data["value"],
-        "classification": current_data["value_classification"],
-        "timestamp": current_data["timestamp"]
-    }
-
-@mcp.tool()
-def get_google_trends(
-    keywords: list[str],
-    period_days: int = 7
-) -> str:
-    """Get Google Trends relative search interest for specified keywords."""
-    from pytrends.request import TrendReq
-
-    logger.info(f"Fetching Google Trends data for {period_days} days")
-
-    timeframe = get_trends_timeframe(period_days)
-    pytrends = TrendReq(hl='en-US', tz=360)
-    pytrends.build_payload(keywords, timeframe=timeframe)
-
-    df = pytrends.interest_over_time()
-    if df.empty:
-        raise ValueError("No data returned from Google Trends")
-
-    # Clean and format data
-    if 'isPartial' in df.columns:
-        df = df[~df['isPartial']].drop('isPartial', axis=1)
-
-    df_reset = df.reset_index()
-
-    return to_clean_csv(df_reset)
 
 @mcp.tool()
 def get_ticker_data(
@@ -744,6 +714,9 @@ if _ta_available:
             "price_data": to_clean_csv(price_df),
             "indicator_data": to_clean_csv(indicator_df)
         }
+
+# Register tools with MCP
+tool_service.register_mcp_handlers(mcp)
 
 if __name__ == "__main__":
     mcp.run()
