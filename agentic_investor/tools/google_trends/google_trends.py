@@ -33,7 +33,7 @@ class GoogleTrendsTool(Tool):
     """Tool that fetches Google Trends relative search interest data."""
 
     name = "get_google_trends"
-    description = "Get Google Trends relative search interest for specified keywords"
+    description = "Get relative search interest data from Google Trends for specified keywords over customizable time periods (7, 30, 90+ days). Returns normalized interest scores (0-100) showing search popularity trends. Use this when asked about public interest trends, search volume comparisons, trending topics, brand awareness over time, seasonal patterns, or correlation between search interest and stock movements. Example keywords: \"bitcoin\", \"Tesla earnings\", \"inflation\", \"recession\"."
     input_model = GoogleTrendsInput
     output_model = GoogleTrendsOutput
 

@@ -18,7 +18,7 @@ class FinancialStatementsTool(Tool):
     """Tool that fetches financial statements (income, balance sheet, cash flow)."""
 
     name = "get_financial_statements"
-    description = "Get financial statements including income statement, balance sheet, and cash flow statement with quarterly or annual frequency"
+    description = "Get detailed financial statements including income statements (revenue, expenses, net income, EPS), balance sheets (assets, liabilities, equity, cash, debt), and cash flow statements (operating cash flow, investing activities, financing activities, free cash flow). Supports both quarterly and annual reporting frequencies with up to 20 historical periods. Use this when asked about company financials, revenue trends, profitability, cash position, debt levels, financial health, accounting metrics, earnings quality, or fundamental analysis. Essential for DCF models, financial modeling, and deep-dive company research. Returns data in structured format with all line items. Example: \"Show me AAPL's last 8 quarters of income statements\" or \"Get TSLA's annual balance sheets\"."
     input_model = FinancialStatementsInput
     output_model = FinancialStatementsOutput
 
@@ -41,7 +41,7 @@ class FinancialStatementsTool(Tool):
             A response containing financial statement data as CSV
         """
         ticker = validate_ticker(input_data.ticker)
-        logger.debug(f"Fetching financial statements for {ticker.ticker}: {input_data.statement_types}, frequency: {input_data.frequency}")
+        logger.debug(f"Fetching financial statements for {ticker}: {input_data.statement_types}, frequency: {input_data.frequency}")
 
         @api_retry
         def get_single_statement(stmt_type: str):

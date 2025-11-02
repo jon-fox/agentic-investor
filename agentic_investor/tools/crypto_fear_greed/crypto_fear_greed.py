@@ -15,7 +15,7 @@ class CryptoFearGreedTool(Tool):
     """Tool that fetches the current Crypto Fear & Greed Index."""
 
     name = "get_crypto_fear_greed_index"
-    description = "Get the current Crypto Fear & Greed Index from alternative.me API"
+    description = "Get the current Crypto Fear & Greed Index (0-100 scale) from Alternative.me, indicating cryptocurrency market sentiment where 0 represents extreme fear and 100 represents extreme greed. Use this when asked about crypto market sentiment, investor psychology in digital assets, Bitcoin market mood, altcoin risk appetite, or whether it's a good time to buy/sell cryptocurrencies. Includes historical data and trend analysis."
     input_model = CryptoFearGreedInput
     output_model = CryptoFearGreedOutput
 

@@ -16,7 +16,7 @@ class TechnicalIndicatorsTool(Tool):
     """Tool that calculates technical indicators using TA-Lib."""
 
     name = "calculate_technical_indicator"
-    description = "Calculate technical indicators (SMA, EMA, RSI, MACD, BBANDS) for stock analysis using TA-Lib"
+    description = "Calculate professional technical analysis indicators using TA-Lib including: Simple Moving Average (SMA), Exponential Moving Average (EMA), Relative Strength Index (RSI), Moving Average Convergence Divergence (MACD with signal line and histogram), and Bollinger Bands (upper/middle/lower bands with standard deviation). Use this when asked about technical analysis, chart indicators, overbought/oversold conditions (RSI), trend identification (moving averages), momentum signals (MACD), volatility analysis (Bollinger Bands), support/resistance levels, crossover signals, or trading indicators. Supports customizable time periods (5-200 periods), lookback windows (1 month to 5 years), and moving average types. Returns up to 1000 data points. Example: \"Calculate RSI for AAPL\" or \"Show me 50-day and 200-day moving averages for SPY\"."
     input_model = TechnicalIndicatorsInput
     output_model = TechnicalIndicatorsOutput
 

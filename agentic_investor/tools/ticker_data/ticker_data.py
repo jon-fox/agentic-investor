@@ -17,7 +17,7 @@ class TickerDataTool(Tool):
     """Tool that fetches comprehensive ticker data including metrics, calendar, news, and recommendations."""
 
     name = "get_ticker_data"
-    description = "Get comprehensive ticker data including basic metrics, earnings calendar, recent news, analyst recommendations, and upgrades/downgrades"
+    description = "Get comprehensive stock analysis including current price, daily volume, market capitalization, P/E ratios (trailing and forward), 52-week high/low range, beta, profit margins, revenue/earnings growth, book value, debt levels, and ROE/ROA metrics. Also includes up to 50 recent news headlines with sources and URLs, latest analyst recommendations (strong buy/buy/hold/sell/strong sell distribution), recent upgrades and downgrades from major firms, and upcoming earnings calendar dates with EPS estimates. Use this when asked about stock performance, company valuation, fundamentals, Wall Street sentiment, analyst opinions, recent company news, or financial health. Supports any public company ticker: AAPL, TSLA, MSFT, GOOGL, AMZN, NVDA, etc."
     input_model = TickerDataInput
     output_model = TickerDataOutput
 
@@ -48,7 +48,7 @@ class TickerDataTool(Tool):
             calendar_future = executor.submit(yf_call, ticker, "get_calendar")
             news_future = executor.submit(yf_call, ticker, "get_news")
 
-            logger.debug(f"Fetching info, calendar, and news for {ticker.ticker}")
+            logger.debug(f"Fetching info, calendar, and news for {ticker}")
             info = info_future.result()
             if not info:
                 raise ValueError(f"No information available for {ticker}")

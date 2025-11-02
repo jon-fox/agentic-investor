@@ -14,7 +14,7 @@ class IntradayDataTool(Tool):
     """Tool that fetches 15-minute historical stock bars using Alpaca API."""
 
     name = "fetch_intraday_data"
-    description = "Fetch 15-minute historical stock bars using Alpaca API. Returns timestamp and close price data in EST timezone."
+    description = "Fetch high-resolution 15-minute interval stock price data (bars) using Alpaca market data API. Returns timestamp and close price for each 15-minute period in EST timezone. Supports up to 1000 bars (roughly 10 trading days of intraday data). Use this when asked about intraday price action, today's trading pattern, minute-by-minute movement, recent price fluctuations, current session behavior, or short-term price trends. Perfect for day trading analysis, identifying intraday support/resistance, or examining recent volatility. Example: \"Show me TSLA's price movement today\" or \"What's the intraday chart for AAPL?\"."
     input_model = IntradayDataInput
     output_model = IntradayDataOutput
 

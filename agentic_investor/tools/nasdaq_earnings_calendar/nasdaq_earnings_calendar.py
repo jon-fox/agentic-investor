@@ -17,7 +17,7 @@ class NasdaqEarningsCalendarTool(Tool):
     """Tool that fetches earnings calendar for a specific date from Nasdaq API."""
 
     name = "get_nasdaq_earnings_calendar"
-    description = "Get earnings calendar for a specific date using Nasdaq API. Returns company earnings dates, EPS estimates, and surprises."
+    description = "Get upcoming earnings announcements for a specific date showing company names, ticker symbols, earnings dates, EPS estimates (high/low/average), revenue estimates, and surprise history. Returns up to 500 companies reporting on the specified date. Use this when asked about earnings calendar, who reports today/tomorrow, upcoming earnings, what companies announce this week, earnings season schedule, or when specific companies report. Defaults to today's date if not specified. Essential for planning trades around earnings events and tracking market-moving announcements. Example: \"Who reports earnings today?\" or \"Show me earnings calendar for next Friday\"."
     input_model = NasdaqEarningsCalendarInput
     output_model = NasdaqEarningsCalendarOutput
 

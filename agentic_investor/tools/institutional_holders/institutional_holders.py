@@ -17,9 +17,7 @@ class InstitutionalHoldersTool(Tool):
     """Tool that fetches major institutional and mutual fund holders."""
 
     name = "get_institutional_holders"
-    description = (
-        "Get major institutional and mutual fund holders with their share positions"
-    )
+    description = "Get major institutional shareholders and mutual fund holders including their position sizes, share counts, percentage of total shares owned, and position values. Returns top 20-100 largest holders. Use this when asked about institutional ownership, who owns the most shares, major shareholders, hedge fund positions, mutual fund holdings, institutional support, ownership concentration, or smart money positioning. High institutional ownership often indicates confidence while institutions selling can signal concerns. Example: \"Who are the biggest holders of NVDA?\" or \"Show me institutional ownership of TSLA\"."
     input_model = InstitutionalHoldersInput
     output_model = InstitutionalHoldersOutput
 
@@ -42,7 +40,7 @@ class InstitutionalHoldersTool(Tool):
             A response containing institutional and mutual fund holder data
         """
         ticker = validate_ticker(input_data.ticker)
-        logger.debug(f"Fetching institutional holders for {ticker.ticker}, top_n: {input_data.top_n}")
+        logger.debug(f"Fetching institutional holders for {ticker}, top_n: {input_data.top_n}")
 
         # Fetch both types in parallel
         with ThreadPoolExecutor() as executor:

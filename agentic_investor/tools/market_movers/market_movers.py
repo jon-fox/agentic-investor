@@ -17,7 +17,7 @@ class MarketMoversTool(Tool):
     """Tool that fetches market movers (gainers, losers, most active)."""
 
     name = "get_market_movers"
-    description = "Get market movers including gainers, losers, and most active stocks. Supports different market sessions."
+    description = "Identify top gaining stocks (biggest winners), biggest losing stocks (worst performers), and most actively traded securities by volume in real-time or recent trading sessions. Use this when asked about \"what's hot\", \"what's moving\", market leaders, volatile stocks, today's biggest movers, stocks making news, pre-market activity, or after-hours trading action. Supports filtering by market session: regular hours, pre-market, and after-hours. Returns up to 100 stocks with price, volume, and percentage change data."
     input_model = MarketMoversInput
     output_model = MarketMoversOutput
 

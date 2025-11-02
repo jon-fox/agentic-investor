@@ -15,7 +15,7 @@ class CNNFearGreedTool(Tool):
     """Tool that fetches the CNN Fear & Greed Index and its indicators."""
 
     name = "get_cnn_fear_greed_index"
-    description = "Get CNN Fear & Greed Index with various market sentiment indicators including VIX, put/call options, junk bond demand, and safe haven demand"
+    description = "Get CNN's Fear & Greed Index showing overall stock market sentiment (0-100 scale) with detailed breakdowns of seven key indicators: VIX volatility levels, put/call option ratios, junk bond demand vs investment grade, safe haven demand (bonds vs stocks), market momentum, stock price strength, and market breadth. Use this when asked about market sentiment, investor psychology, risk appetite, bull/bear market conditions, whether markets are overbought/oversold, or overall market health. Scale: 0=extreme fear, 100=extreme greed."
     input_model = CNNFearGreedInput
     output_model = CNNFearGreedOutput
 

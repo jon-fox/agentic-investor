@@ -24,7 +24,7 @@ class OptionsTool(Tool):
     """Tool that fetches options chain data with filtering capabilities."""
 
     name = "get_options"
-    description = "Get options chain data with filtering by expiration date, strike price, and option type (calls/puts)"
+    description = "Retrieve options chain data including strike prices, expiration dates, bid/ask spreads, implied volatility, open interest, trading volume, and Greeks (delta, gamma, theta, vega) for both call and put options. Use this when asked about options strategies, checking option premiums, evaluating covered calls, analyzing protective puts, finding strike prices, assessing derivatives positions, volatility trading opportunities, or options expiring soon. Supports flexible filtering by strike price range, expiration date window (start/end dates), and option type (calls only, puts only, or both). Returns up to 1000 contracts per query. Example usage: AAPL calls expiring in 30 days, TSLA puts near current price."
     input_model = OptionsInput
     output_model = OptionsOutput
 

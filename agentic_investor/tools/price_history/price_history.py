@@ -16,7 +16,7 @@ class PriceHistoryTool(Tool):
     """Tool that fetches historical OHLCV price data for stocks."""
 
     name = "get_price_history"
-    description = "Get historical OHLCV (Open, High, Low, Close, Volume) price data for a stock with smart interval selection"
+    description = "Get historical OHLCV (Open, High, Low, Close, Volume) stock price data with smart interval selection based on time period. Returns daily data for longer periods and intraday data for shorter periods. Use this when asked about price history, past performance, stock charts, historical trends, price patterns over time, year-to-date performance, or comparing current prices to historical levels. Supports periods: 1 day, 5 days, 1 month, 3 months, 6 months, 1 year, 2 years, 5 years, 10 years, year-to-date, and maximum available history. Perfect for backtesting, technical analysis, and historical comparisons. Works with any ticker: AAPL, TSLA, SPY, QQQ, etc."
     input_model = PriceHistoryInput
     output_model = PriceHistoryOutput
 
@@ -41,7 +41,7 @@ class PriceHistoryTool(Tool):
         ticker = validate_ticker(input_data.ticker)
 
         interval = "1mo" if input_data.period in ["2y", "5y", "10y", "max"] else "1d"
-        logger.debug(f"Fetching price history for {ticker.ticker}, period: {input_data.period}, interval: {interval}")
+        logger.debug(f"Fetching price history for {ticker}, period: {input_data.period}, interval: {interval}")
         history = yf_call(
             ticker, "history", period=input_data.period, interval=interval
         )
