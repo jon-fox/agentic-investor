@@ -70,7 +70,7 @@ uvx "agentic-investor[ta,alpaca]"
 - **`get_earnings_history(ticker, max_entries=8)`** - Historical earnings data with configurable entry limits
 - **`get_insider_trades(ticker, max_trades=20)`** - Recent insider trading activity with configurable trade limits
 - **`get_nasdaq_earnings_calendar(date=None, limit=100)`** - Upcoming earnings announcements using Nasdaq API (YYYY-MM-DD format, defaults to today).
-- **`fetch_intraday_data(stock, window=200)`** - Fetch 15-minute historical stock bars using Alpaca API. Returns CSV string with timestamp and close price data in EST timezone. Requires `investor-agent[alpaca]` installation and ALPACA_API_KEY/ALPACA_API_SECRET environment variables.
+- **`fetch_intraday_data(stock, window=200)`** - Fetch 15-minute historical stock bars using Alpaca API. Returns CSV string with timestamp and close price data in EST timezone. Requires `agentic-investor[alpaca]` installation and ALPACA_API_KEY/ALPACA_API_SECRET environment variables.
 
 ### Market Sentiment
 - **`get_cnn_fear_greed_index(indicators=None)`** - CNN Fear & Greed Index with selective indicator filtering. Available indicators: fear_and_greed, fear_and_greed_historical, put_call_options, market_volatility_vix, market_volatility_vix_50, junk_bond_demand, safe_haven_demand
@@ -127,4 +127,4 @@ MIT License. See [LICENSE](LICENSE) file for details.
 
 ## Credits
 
-This project was originally forked from [investor-agent](https://github.com/ferdousbhai/investor-agent) by ferdousbhai.
+This project was originally forked from [agentic-investor](https://github.com/ferdousbhai/agentic-investor) by ferdousbhai.

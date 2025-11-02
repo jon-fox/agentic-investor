@@ -44,17 +44,17 @@ dev = [
 ]
 
 [project.scripts]
-agentic-investor = "investor_agent.server:mcp.run"
+agentic-investor = "agentic_investor.server:mcp.run"
 
 [build-system]
 requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["investor_agent"]
+packages = ["agentic_investor"]
 
 [tool.hatch.version]
 source = "vcs"
 
 [tool.hatch.build.hooks.vcs]
-version-file = "investor_agent/_version.py"
+version-file = "agentic_investor/_version.py"
