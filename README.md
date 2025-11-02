@@ -1,8 +1,8 @@
-# agentic-investor: A Financial Analysis MCP Server
+# Agentic-Investor: A Financial Analysis MCP Server
 
 ## Overview
 
-The **agentic-investor** is a Model Context Protocol (MCP) server that provides comprehensive financial insights and analysis to Large Language Models. It leverages real-time market data, fundamental and technical analysis to deliver:
+The **Agentic-Investor** is a Model Context Protocol (MCP) server that provides comprehensive financial insights and analysis to Large Language Models. It leverages real-time market data, fundamental and technical analysis to deliver:
 
 - **Market Movers:** Top gainers, losers, and most active stocks with support for different market sessions
 - **Ticker Analysis:** Company overview, news, metrics, analyst recommendations, and upgrades/downgrades
@@ -159,4 +159,4 @@ MIT License. See [LICENSE](LICENSE) file for details.
 
 ## Credits
 
-This project was originally forked from [agentic-investor](https://github.com/ferdousbhai/agentic-investor) by ferdousbhai.
+This project was originally forked from [agentic-investor](https://github.com/ferdousbhai/agentic-investor). It is intended to diverge and exist as a standalone open source mcp that will have a premium endpoint available.
