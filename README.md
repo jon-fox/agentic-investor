@@ -80,16 +80,32 @@ uvx "agentic-investor[ta,alpaca]"
 ### Technical Analysis
 - **`calculate_technical_indicator(ticker, indicator, period="1y", timeperiod=14, fastperiod=12, slowperiod=26, signalperiod=9, nbdev=2, matype=0, num_results=100)`** - Calculate technical indicators (SMA, EMA, RSI, MACD, BBANDS) with configurable parameters and result limiting. Returns dictionary with price_data and indicator_data as CSV strings. matype values: 0=SMA, 1=EMA, 2=WMA, 3=DEMA, 4=TEMA, 5=TRIMA, 6=KAMA, 7=MAMA, 8=T3. Requires TA-Lib library.
 
-## Usage with MCP Clients
+## Usage with MCP Clients locally
 
-Add to your `claude_desktop_config.json`:
+Install mcp-remote
+
+https://www.npmjs.com/package/mcp-remote
+
+```bash
+npm i mcp-remote
+```
+
+Start the server and add to your `claude_desktop_config.json`:
+
+```bash
+uv run python -m agentic_investor.server
+```
 
 ```json
 {
   "mcpServers": {
-    "investor": {
-      "command": "uvx",
-      "args": ["agentic-investor"]
+    "Agentic-Investor": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "http://0.0.0.0:8000/mcp",
+        "--allow-http"
+      ]
     }
   }
 }
