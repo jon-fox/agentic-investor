@@ -1,5 +1,5 @@
 [project]
-name = "investor-agent"
+name = "agentic-investor"
 dynamic = ["version"]
 description = "A Model Context Protocol server for an investor agent"
 readme = "README.md"
@@ -18,7 +18,7 @@ dependencies = [
     "yfinance[nospam]>=0.2.66",
 ]
 authors = [
-    { name = "Ferdous", email = "ferdous@hey.com" }
+    { name = "jfox", email = "howsitgoing@email.com" }
 ]
 keywords = ["investment", "finance", "trading", "agent", "mcp", "model context protocol", "broker", "robinhood", "wallstreetbets"]
 classifiers = [
@@ -44,7 +44,7 @@ dev = [
 ]
 
 [project.scripts]
-investor-agent = "investor_agent.server:mcp.run"
+agentic-investor = "investor_agent.server:mcp.run"
 
 [build-system]
 requires = ["hatchling", "hatch-vcs"]

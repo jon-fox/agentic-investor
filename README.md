@@ -1,12 +1,8 @@
-[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/ferdousbhai-investor-agent-badge.png)](https://mseep.ai/app/ferdousbhai-investor-agent)
-
-[![Trust Score](https://archestra.ai/mcp-catalog/api/badge/quality/ferdousbhai/investor-agent)](https://archestra.ai/mcp-catalog/ferdousbhai__investor-agent)
-
-# investor-agent: A Financial Analysis MCP Server
+# agentic-investor: A Financial Analysis MCP Server
 
 ## Overview
 
-The **investor-agent** is a Model Context Protocol (MCP) server that provides comprehensive financial insights and analysis to Large Language Models. It leverages real-time market data, fundamental and technical analysis to deliver:
+The **agentic-investor** is a Model Context Protocol (MCP) server that provides comprehensive financial insights and analysis to Large Language Models. It leverages real-time market data, fundamental and technical analysis to deliver:
 
 - **Market Movers:** Top gainers, losers, and most active stocks with support for different market sessions
 - **Ticker Analysis:** Company overview, news, metrics, analyst recommendations, and upgrades/downgrades
@@ -50,16 +46,16 @@ This multi-layered approach ensures reliable data delivery while respecting API 
 
 ```bash
 # Core features only
-uvx investor-agent
+uvx agentic-investor
 
 # With technical indicators (requires TA-Lib)
-uvx "investor-agent[ta]"
+uvx "agentic-investor[ta]"
 
 # With Alpaca intraday data (requires Alpaca API keys)
-uvx "investor-agent[alpaca]"
+uvx "agentic-investor[alpaca]"
 
 # With all optional features
-uvx "investor-agent[ta,alpaca]"
+uvx "agentic-investor[ta,alpaca]"
 ```
 
 ## Tools
@@ -93,7 +89,7 @@ Add to your `claude_desktop_config.json`:
   "mcpServers": {
     "investor": {
       "command": "uvx",
-      "args": ["investor-agent"]
+      "args": ["agentic-investor"]
     }
   }
 }
@@ -122,9 +118,13 @@ For available model providers and identifiers, see the [pydantic-ai documentatio
 ## Debugging
 
 ```bash
-npx @modelcontextprotocol/inspector uvx investor-agent
+npx @modelcontextprotocol/inspector uvx agentic-investor
 ```
 
 ## License
 
 MIT License. See [LICENSE](LICENSE) file for details.
+
+## Credits
+
+This project was originally forked from [investor-agent](https://github.com/ferdousbhai/investor-agent) by ferdousbhai.

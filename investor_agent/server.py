@@ -17,7 +17,7 @@ from .tools.nasdaq_earnings_calendar import NasdaqEarningsCalendarTool
 from .tools.intraday_data import IntradayDataTool
 from .tools.technical_indicators import TechnicalIndicatorsTool
 
-mcp = FastMCP("Investor-Agent", dependencies=["yfinance", "pandas", "pytrends"])
+mcp = FastMCP("Agentic-Investor", dependencies=["yfinance", "pandas", "pytrends"])
 
 # Initialize tool service and register tools
 tool_service = ToolService()

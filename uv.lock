@@ -865,7 +865,7 @@ wheels = [
 ]
 
 [[package]]
-name = "investor-agent"
+name = "agentic-investor"
 source = { editable = "." }
 dependencies = [
     { name = "anysqlite" },

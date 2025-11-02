@@ -16,7 +16,7 @@ logger.info(f"Creating agent with model: {model_identifier}")
 
 try:
     server = MCPServerStdio(
-        'uv', args=['run', 'investor-agent', 'stdio'], timeout=60, env=dict(os.environ)
+        'uv', args=['run', 'agentic-investor', 'stdio'], timeout=60, env=dict(os.environ)
     )
     agent = Agent(model_identifier, toolsets=[server])
     agent.set_mcp_sampling_model() # Allows MCP server to make LLM calls via the MCP client
