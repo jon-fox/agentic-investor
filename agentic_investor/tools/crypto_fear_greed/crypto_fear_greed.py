@@ -5,9 +5,10 @@ from typing import Dict, Any
 
 from agentic_investor.utils import fetch_json
 from agentic_investor.interfaces.tool import Tool, ToolResponse
+from agentic_investor.utils.logger import get_debug_logger
 from .models import CryptoFearGreedInput, CryptoFearGreedOutput
 
-logger = logging.getLogger(__name__)
+logger = get_debug_logger(__name__)
 
 
 class CryptoFearGreedTool(Tool):
@@ -36,9 +37,11 @@ class CryptoFearGreedTool(Tool):
         Returns:
             A response containing the index data
         """
+        logger.debug("Fetching Crypto Fear & Greed Index from alternative.me")
         CRYPTO_FEAR_GREED_URL = "https://api.alternative.me/fng/"
 
         data = await fetch_json(CRYPTO_FEAR_GREED_URL)
+        logger.debug(f"Successfully fetched Crypto Fear & Greed Index: {data.get('data', [{}])[0].get('value_classification', 'unknown')}")
         if "data" not in data or not data["data"]:
             raise ValueError("Invalid response format from alternative.me API")
 

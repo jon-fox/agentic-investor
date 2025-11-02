@@ -3,8 +3,11 @@
 from typing import Dict, List
 import re
 import inspect
-from mcp.server.fastmcp import FastMCP
-from example_mcp_server.interfaces.resource import Resource, ResourceResponse
+from fastmcp import FastMCP
+from agentic_investor.interfaces.resource import Resource, ResourceResponse
+from agentic_investor.utils.logger import get_debug_logger
+
+logger = get_debug_logger(__name__)
 
 
 class ResourceService:
@@ -16,6 +19,7 @@ class ResourceService:
 
     def register_resource(self, resource: Resource) -> None:
         """Register a new resource."""
+        logger.debug(f"Registering resource: {resource.name} with URI: {resource.uri}")
         # Store the resource by its URI pattern for handler registration
         self._uri_patterns[resource.uri] = resource
 
@@ -25,6 +29,7 @@ class ResourceService:
 
     def register_resources(self, resources: List[Resource]) -> None:
         """Register multiple resources."""
+        logger.debug(f"Registering {len(resources)} resources")
         for resource in resources:
             self.register_resource(resource)
 

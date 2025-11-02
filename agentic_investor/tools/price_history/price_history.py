@@ -6,9 +6,10 @@ from typing import Dict, Any
 
 from agentic_investor.utils import validate_ticker, yf_call, to_clean_csv
 from agentic_investor.interfaces.tool import Tool, ToolResponse
+from agentic_investor.utils.logger import get_debug_logger
 from .models import PriceHistoryInput, PriceHistoryOutput
 
-logger = logging.getLogger(__name__)
+logger = get_debug_logger(__name__)
 
 
 class PriceHistoryTool(Tool):
@@ -40,6 +41,7 @@ class PriceHistoryTool(Tool):
         ticker = validate_ticker(input_data.ticker)
 
         interval = "1mo" if input_data.period in ["2y", "5y", "10y", "max"] else "1d"
+        logger.debug(f"Fetching price history for {ticker.ticker}, period: {input_data.period}, interval: {interval}")
         history = yf_call(
             ticker, "history", period=input_data.period, interval=interval
         )

@@ -6,9 +6,10 @@ from typing import Dict, Any
 
 from agentic_investor.utils import validate_ticker, yf_call, to_clean_csv
 from agentic_investor.interfaces.tool import Tool, ToolResponse
+from agentic_investor.utils.logger import get_debug_logger
 from .models import InsiderTradesInput, InsiderTradesOutput
 
-logger = logging.getLogger(__name__)
+logger = get_debug_logger(__name__)
 
 
 class InsiderTradesTool(Tool):
@@ -38,6 +39,7 @@ class InsiderTradesTool(Tool):
             A response containing insider trading data as CSV
         """
         ticker = validate_ticker(input_data.ticker)
+        logger.debug(f"Fetching insider trades for {ticker.ticker}, max_trades: {input_data.max_trades}")
 
         trades = yf_call(ticker, "get_insider_transactions")
         if trades is None or (isinstance(trades, pd.DataFrame) and trades.empty):

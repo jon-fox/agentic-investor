@@ -7,9 +7,10 @@ from typing import Dict, Any
 
 from agentic_investor.utils import fetch_text, to_clean_csv
 from agentic_investor.interfaces.tool import Tool, ToolResponse
+from agentic_investor.utils.logger import get_debug_logger
 from .models import MarketMoversInput, MarketMoversOutput
 
-logger = logging.getLogger(__name__)
+logger = get_debug_logger(__name__)
 
 
 class MarketMoversTool(Tool):
@@ -38,6 +39,8 @@ class MarketMoversTool(Tool):
         Returns:
             A response containing the market movers data as CSV
         """
+        logger.debug(f"Fetching market movers: category={input_data.category}, session={input_data.market_session}, count={input_data.count}")
+        
         # URLs for different market movers categories
         YAHOO_MOST_ACTIVE_URL = "https://finance.yahoo.com/most-active"
         YAHOO_PRE_MARKET_URL = "https://finance.yahoo.com/markets/stocks/pre-market"
@@ -71,9 +74,7 @@ class MarketMoversTool(Tool):
         else:
             raise ValueError(f"Invalid category: {input_data.category}")
 
-        logger.info(
-            f"Fetching {input_data.category} ({input_data.market_session} session) from: {url}"
-        )
+        logger.debug(f"Fetching data from URL: {url}")
         response_text = await fetch_text(url, BROWSER_HEADERS)
         tables = pd.read_html(StringIO(response_text))
         if not tables or tables[0].empty:
@@ -81,6 +82,7 @@ class MarketMoversTool(Tool):
 
         df = tables[0].loc[:, ~tables[0].columns.str.contains("^Unnamed")]
         csv_data = to_clean_csv(df.head(count))
+        logger.debug(f"Successfully fetched {len(df)} market movers")
 
         output = MarketMoversOutput(movers_data=csv_data)
         return ToolResponse.from_model(output)

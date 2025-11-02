@@ -6,9 +6,10 @@ from typing import Dict, Any
 
 from agentic_investor.utils import validate_ticker, yf_call, to_clean_csv
 from agentic_investor.interfaces.tool import Tool, ToolResponse
+from agentic_investor.utils.logger import get_debug_logger
 from .models import EarningsHistoryInput, EarningsHistoryOutput
 
-logger = logging.getLogger(__name__)
+logger = get_debug_logger(__name__)
 
 
 class EarningsHistoryTool(Tool):
@@ -38,6 +39,7 @@ class EarningsHistoryTool(Tool):
             A response containing earnings history data as CSV
         """
         ticker = validate_ticker(input_data.ticker)
+        logger.debug(f"Fetching earnings history for {ticker.ticker}, max_entries: {input_data.max_entries}")
 
         earnings_history = yf_call(ticker, "get_earnings_history")
         if earnings_history is None or (

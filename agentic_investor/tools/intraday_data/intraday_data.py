@@ -4,9 +4,10 @@ import logging
 from typing import Dict, Any
 
 from agentic_investor.interfaces.tool import Tool, ToolResponse
+from agentic_investor.utils.logger import get_debug_logger
 from .models import IntradayDataInput, IntradayDataOutput
 
-logger = logging.getLogger(__name__)
+logger = get_debug_logger(__name__)
 
 
 class IntradayDataTool(Tool):
@@ -35,6 +36,8 @@ class IntradayDataTool(Tool):
         Returns:
             A response containing intraday data as CSV or error message
         """
+        logger.debug(f"Fetching intraday data for {input_data.stock}, window: {input_data.window}")
+        
         # Check if Alpaca is available
         try:
             from alpaca.data.timeframe import TimeFrame, TimeFrameUnit

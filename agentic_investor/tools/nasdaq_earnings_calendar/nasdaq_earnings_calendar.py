@@ -7,9 +7,10 @@ from typing import Dict, Any
 
 from agentic_investor.utils import validate_date, fetch_json, to_clean_csv
 from agentic_investor.interfaces.tool import Tool, ToolResponse
+from agentic_investor.utils.logger import get_debug_logger
 from .models import NasdaqEarningsCalendarInput, NasdaqEarningsCalendarOutput
 
-logger = logging.getLogger(__name__)
+logger = get_debug_logger(__name__)
 
 
 class NasdaqEarningsCalendarTool(Tool):
@@ -48,6 +49,7 @@ class NasdaqEarningsCalendarTool(Tool):
         # Set default date if not provided or validate provided date
         today = datetime.date.today()
         target_date = validate_date(input_data.date) if input_data.date else today
+        logger.debug(f"Fetching Nasdaq earnings calendar for date: {target_date}, limit: {input_data.limit}")
 
         date_str = target_date.strftime("%Y-%m-%d")
         url = f"{NASDAQ_EARNINGS_URL}?date={date_str}"

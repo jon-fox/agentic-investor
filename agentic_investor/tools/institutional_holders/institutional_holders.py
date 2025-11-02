@@ -7,9 +7,10 @@ from typing import Dict, Any
 
 from agentic_investor.utils import validate_ticker, yf_call, to_clean_csv
 from agentic_investor.interfaces.tool import Tool, ToolResponse
+from agentic_investor.utils.logger import get_debug_logger
 from .models import InstitutionalHoldersInput, InstitutionalHoldersOutput
 
-logger = logging.getLogger(__name__)
+logger = get_debug_logger(__name__)
 
 
 class InstitutionalHoldersTool(Tool):
@@ -41,6 +42,7 @@ class InstitutionalHoldersTool(Tool):
             A response containing institutional and mutual fund holder data
         """
         ticker = validate_ticker(input_data.ticker)
+        logger.debug(f"Fetching institutional holders for {ticker.ticker}, top_n: {input_data.top_n}")
 
         # Fetch both types in parallel
         with ThreadPoolExecutor() as executor:

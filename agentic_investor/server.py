@@ -1,7 +1,8 @@
 import pandas as pd
-from mcp.server.fastmcp import FastMCP
+from fastmcp import FastMCP
 
 from agentic_investor.services.tool_service import ToolService
+from agentic_investor.utils.middleware import RequestLoggingMiddleware
 from agentic_investor.tools.crypto_fear_greed import CryptoFearGreedTool
 from agentic_investor.tools.google_trends import GoogleTrendsTool
 from agentic_investor.tools.market_movers import MarketMoversTool
@@ -18,6 +19,9 @@ from agentic_investor.tools.intraday_data import IntradayDataTool
 from agentic_investor.tools.technical_indicators import TechnicalIndicatorsTool
 
 mcp = FastMCP("Agentic-Investor", dependencies=["yfinance", "pandas", "pytrends"])
+
+# Add request logging middleware
+mcp.add_middleware(RequestLoggingMiddleware())
 
 # Initialize tool service and register tools
 tool_service = ToolService()

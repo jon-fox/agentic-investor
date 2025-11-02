@@ -1,8 +1,11 @@
 """Service layer for managing tools."""
 
 from typing import Dict, List, Any
-from mcp.server.fastmcp import FastMCP
+from fastmcp import FastMCP
 from agentic_investor.interfaces.tool import Tool, ToolResponse, ToolContent
+from agentic_investor.utils.logger import get_debug_logger
+
+logger = get_debug_logger(__name__)
 
 
 class ToolService:
@@ -13,10 +16,12 @@ class ToolService:
 
     def register_tool(self, tool: Tool) -> None:
         """Register a new tool."""
+        logger.debug(f"Registering tool: {tool.name}")
         self._tools[tool.name] = tool
 
     def register_tools(self, tools: List[Tool]) -> None:
         """Register multiple tools."""
+        logger.debug(f"Registering {len(tools)} tools")
         for tool in tools:
             self.register_tool(tool)
 
@@ -42,13 +47,16 @@ class ToolService:
             ValueError: If the tool is not found
             ValidationError: If the input data is invalid
         """
+        logger.debug(f"Executing tool: {tool_name} with input: {input_data}")
         tool = self.get_tool(tool_name)
 
         # Use model_validate to handle complex nested objects properly
         input_model = tool.input_model.model_validate(input_data)
 
         # Execute the tool with validated input
-        return await tool.execute(input_model)
+        result = await tool.execute(input_model)
+        logger.debug(f"Tool {tool_name} execution completed successfully")
+        return result
 
     def _process_tool_content(self, content: ToolContent) -> Any:
         """Process a ToolContent object based on its type.

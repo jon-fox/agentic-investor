@@ -6,9 +6,10 @@ from typing import Dict, Any
 
 from agentic_investor.utils import validate_ticker, yf_call, to_clean_csv
 from agentic_investor.interfaces.tool import Tool, ToolResponse
+from agentic_investor.utils.logger import get_debug_logger
 from .models import TechnicalIndicatorsInput, TechnicalIndicatorsOutput
 
-logger = logging.getLogger(__name__)
+logger = get_debug_logger(__name__)
 
 
 class TechnicalIndicatorsTool(Tool):
@@ -47,6 +48,8 @@ class TechnicalIndicatorsTool(Tool):
             output = TechnicalIndicatorsOutput(data={"error": error_msg})
             return ToolResponse.from_model(output)
 
+        logger.debug(f"Calculating {input_data.indicator} for {input_data.ticker}, period: {input_data.period}")
+        
         try:
             ticker = validate_ticker(input_data.ticker)
 

@@ -117,9 +117,25 @@ For available model providers and identifiers, see the [pydantic-ai documentatio
 
 ## Debugging
 
+### MCP Inspector
+
 ```bash
 npx @modelcontextprotocol/inspector uvx agentic-investor
 ```
+
+### Debug Logging
+
+Enable detailed debug logging for development and troubleshooting:
+
+```bash
+# Enable debug logging
+export DEBUG_LOGGING=true
+
+# Run with debug logging
+DEBUG_LOGGING=true python -m agentic_investor.server
+```
+
+See [DEBUG_LOGGING.md](DEBUG_LOGGING.md) for more details on what gets logged and how to use it.
 
 ## License
 

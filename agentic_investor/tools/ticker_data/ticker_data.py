@@ -7,9 +7,10 @@ from typing import Dict, Any
 
 from agentic_investor.utils import validate_ticker, yf_call, format_date_string, to_clean_csv
 from agentic_investor.interfaces.tool import Tool, ToolResponse
+from agentic_investor.utils.logger import get_debug_logger
 from .models import TickerDataInput, TickerDataOutput
 
-logger = logging.getLogger(__name__)
+logger = get_debug_logger(__name__)
 
 
 class TickerDataTool(Tool):
@@ -38,6 +39,7 @@ class TickerDataTool(Tool):
         Returns:
             A response containing comprehensive ticker data
         """
+        logger.debug(f"Fetching ticker data for: {input_data.ticker}")
         ticker = validate_ticker(input_data.ticker)
 
         # Get all basic data in parallel
@@ -46,6 +48,7 @@ class TickerDataTool(Tool):
             calendar_future = executor.submit(yf_call, ticker, "get_calendar")
             news_future = executor.submit(yf_call, ticker, "get_news")
 
+            logger.debug(f"Fetching info, calendar, and news for {ticker.ticker}")
             info = info_future.result()
             if not info:
                 raise ValueError(f"No information available for {ticker}")

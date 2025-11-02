@@ -6,9 +6,10 @@ from typing import Dict, Any
 
 from agentic_investor.utils import to_clean_csv
 from agentic_investor.interfaces.tool import Tool, ToolResponse
+from agentic_investor.utils.logger import get_debug_logger
 from .models import GoogleTrendsInput, GoogleTrendsOutput
 
-logger = logging.getLogger(__name__)
+logger = get_debug_logger(__name__)
 
 # Google Trends timeframe mapping
 TREND_TIMEFRAMES = {
@@ -56,9 +57,10 @@ class GoogleTrendsTool(Tool):
         """
         from pytrends.request import TrendReq
 
-        logger.info(f"Fetching Google Trends data for {input_data.period_days} days")
+        logger.debug(f"Fetching Google Trends for keywords: {input_data.keywords}, period: {input_data.period_days} days")
 
         timeframe = get_trends_timeframe(input_data.period_days)
+        logger.debug(f"Using Google Trends timeframe: {timeframe}")
         pytrends = TrendReq(hl="en-US", tz=360)
         pytrends.build_payload(input_data.keywords, timeframe=timeframe)
 

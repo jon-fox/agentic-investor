@@ -14,9 +14,10 @@ from agentic_investor.utils import (
     to_clean_csv,
 )
 from agentic_investor.interfaces.tool import Tool, ToolResponse
+from agentic_investor.utils.logger import get_debug_logger
 from .models import OptionsInput, OptionsOutput
 
-logger = logging.getLogger(__name__)
+logger = get_debug_logger(__name__)
 
 
 class OptionsTool(Tool):
@@ -45,6 +46,7 @@ class OptionsTool(Tool):
         Returns:
             A response containing options chain data as CSV
         """
+        logger.debug(f"Fetching options chain for {input_data.ticker_symbol}, expiration={input_data.expiration_date}")
         ticker_symbol = validate_ticker(input_data.ticker_symbol)
 
         try:

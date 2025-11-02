@@ -3,8 +3,11 @@
 from typing import Dict, List, Any
 import logging
 import inspect
-from mcp.server.fastmcp import FastMCP
-from example_mcp_server.interfaces.prompt import Prompt, PromptResponse, PromptContent
+from fastmcp import FastMCP
+from agentic_investor.interfaces.prompt import Prompt, PromptResponse, PromptContent
+from agentic_investor.utils.logger import get_debug_logger
+
+logger = get_debug_logger(__name__)
 
 
 class PromptService:
@@ -15,10 +18,12 @@ class PromptService:
 
     def register_prompt(self, prompt: Prompt) -> None:
         """Register a new prompt."""
+        logger.debug(f"Registering prompt: {prompt.name}")
         self._prompts[prompt.name] = prompt
 
     def register_prompts(self, prompts: List[Prompt]) -> None:
         """Register multiple prompts."""
+        logger.debug(f"Registering {len(prompts)} prompts")
         for prompt in prompts:
             self.register_prompt(prompt)
 
@@ -36,12 +41,15 @@ class PromptService:
         This validates the input against the prompt's input model and calls
         the prompt's async generate method.
         """
+        logger.debug(f"Generating prompt: {prompt_name} with input: {input_data}")
         prompt = self.get_prompt(prompt_name)
 
         # Validate input using Pydantic model_validate to support nested models
         input_model = prompt.input_model.model_validate(input_data)
 
-        return await prompt.generate(input_model)
+        result = await prompt.generate(input_model)
+        logger.debug(f"Prompt {prompt_name} generation completed successfully")
+        return result
 
     def _process_prompt_content(
         self, content: PromptContent

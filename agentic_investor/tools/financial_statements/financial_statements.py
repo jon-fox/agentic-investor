@@ -8,9 +8,10 @@ from typing import Dict, Any
 
 from agentic_investor.utils import validate_ticker, to_clean_csv, api_retry
 from agentic_investor.interfaces.tool import Tool, ToolResponse
+from agentic_investor.utils.logger import get_debug_logger
 from .models import FinancialStatementsInput, FinancialStatementsOutput
 
-logger = logging.getLogger(__name__)
+logger = get_debug_logger(__name__)
 
 
 class FinancialStatementsTool(Tool):
@@ -40,6 +41,7 @@ class FinancialStatementsTool(Tool):
             A response containing financial statement data as CSV
         """
         ticker = validate_ticker(input_data.ticker)
+        logger.debug(f"Fetching financial statements for {ticker.ticker}: {input_data.statement_types}, frequency: {input_data.frequency}")
 
         @api_retry
         def get_single_statement(stmt_type: str):

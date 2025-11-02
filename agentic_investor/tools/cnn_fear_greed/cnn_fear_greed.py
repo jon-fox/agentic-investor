@@ -5,9 +5,10 @@ from typing import Dict, Any
 
 from agentic_investor.utils import fetch_json, BROWSER_HEADERS
 from agentic_investor.interfaces.tool import Tool, ToolResponse
+from agentic_investor.utils.logger import get_debug_logger
 from .models import CNNFearGreedInput, CNNFearGreedOutput
 
-logger = logging.getLogger(__name__)
+logger = get_debug_logger(__name__)
 
 
 class CNNFearGreedTool(Tool):
@@ -36,6 +37,7 @@ class CNNFearGreedTool(Tool):
         Returns:
             A response containing the fear & greed index data
         """
+        logger.debug("Fetching CNN Fear & Greed Index data")
         CNN_FEAR_GREED_URL = (
             "https://production.dataviz.cnn.io/index/fearandgreed/graphdata"
         )
@@ -43,6 +45,8 @@ class CNNFearGreedTool(Tool):
         raw_data = await fetch_json(CNN_FEAR_GREED_URL, BROWSER_HEADERS)
         if not raw_data:
             raise ValueError("Empty response data")
+        
+        logger.debug(f"Successfully fetched Fear & Greed Index data")
 
         # Remove historical time series data arrays
         result = {
