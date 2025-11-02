@@ -1,44 +1,15 @@
 """Tool for fetching Nasdaq earnings calendar."""
 
+import datetime
 import logging
 import pandas as pd
-import datetime
 from typing import Dict, Any
 
+from ...utils import validate_date, fetch_json, to_clean_csv
 from ..interfaces.tool import Tool, ToolResponse
 from .models import NasdaqEarningsCalendarInput, NasdaqEarningsCalendarOutput
 
 logger = logging.getLogger(__name__)
-
-
-def validate_date(date_str: str) -> datetime.date:
-    """Validate and parse a date string in YYYY-MM-DD format."""
-    try:
-        return datetime.datetime.strptime(date_str, '%Y-%m-%d').date()
-    except ValueError:
-        raise ValueError(f"Invalid date format: {date_str}. Use YYYY-MM-DD")
-
-
-async def fetch_json(url: str, headers: dict | None = None) -> dict:
-    """Generic JSON fetcher with retry logic."""
-    from hishel.httpx import AsyncCacheClient
-    
-    async_client = AsyncCacheClient(
-        timeout=30.0,
-        follow_redirects=True,
-        headers=headers,
-    )
-    async with async_client as client:
-        response = await client.get(url)
-        response.raise_for_status()
-        return response.json()
-
-
-def to_clean_csv(df: pd.DataFrame) -> str:
-    """Clean DataFrame by removing empty columns and convert to CSV string."""
-    mask = (df.notna().any() & (df != '').any() &
-            ((df != 0).any() | (df.dtypes == 'object')))
-    return df.loc[:, mask].fillna('').to_csv(index=False)
 
 
 class NasdaqEarningsCalendarTool(Tool):

@@ -2,65 +2,15 @@
 
 import logging
 import pandas as pd
-import yfinance as yf
 from concurrent.futures import ThreadPoolExecutor
 from typing import Dict, Any, Literal
 import datetime
 
+from ...utils import validate_ticker, validate_date, validate_date_range, get_options_chain, to_clean_csv
 from ..interfaces.tool import Tool, ToolResponse
 from .models import OptionsInput, OptionsOutput
 
 logger = logging.getLogger(__name__)
-
-
-def validate_ticker(ticker: str) -> str:
-    """Validate and normalize ticker symbol."""
-    ticker = ticker.upper().strip()
-    if not ticker:
-        raise ValueError("Ticker symbol cannot be empty")
-    return ticker
-
-
-def validate_date(date_str: str) -> datetime.date:
-    """Validate and parse a date string in YYYY-MM-DD format."""
-    try:
-        return datetime.datetime.strptime(date_str, '%Y-%m-%d').date()
-    except ValueError:
-        raise ValueError(f"Invalid date format: {date_str}. Use YYYY-MM-DD")
-
-
-def validate_date_range(start_str: str | None, end_str: str | None) -> None:
-    """Validate date range."""
-    start_date = None
-    end_date = None
-
-    if start_str:
-        start_date = validate_date(start_str)
-    if end_str:
-        end_date = validate_date(end_str)
-
-    if start_date and end_date and start_date > end_date:
-        raise ValueError("start_date must be before or equal to end_date")
-
-
-def get_options_chain(ticker: str, expiry: str, option_type: Literal["C", "P"] | None = None) -> pd.DataFrame:
-    """Get options chain with optional filtering by type."""
-    t = yf.Ticker(ticker)
-    chain = t.option_chain(expiry)
-
-    if option_type == "C":
-        return chain.calls
-    elif option_type == "P":
-        return chain.puts
-
-    return pd.concat([chain.calls, chain.puts], ignore_index=True)
-
-
-def to_clean_csv(df: pd.DataFrame) -> str:
-    """Clean DataFrame by removing empty columns and convert to CSV string."""
-    mask = (df.notna().any() & (df != '').any() &
-            ((df != 0).any() | (df.dtypes == 'object')))
-    return df.loc[:, mask].fillna('').to_csv(index=False)
 
 
 class OptionsTool(Tool):
@@ -96,6 +46,7 @@ class OptionsTool(Tool):
             validate_date_range(input_data.start_date, input_data.end_date)
 
             # Get options expirations - this is a property, not a method
+            import yfinance as yf
             t = yf.Ticker(ticker_symbol)
             expirations = t.options
             if not expirations:

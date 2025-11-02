@@ -3,25 +3,11 @@
 import logging
 from typing import Dict, Any
 
+from ...utils import fetch_json
 from ..interfaces.tool import Tool, ToolResponse
 from .models import CryptoFearGreedInput, CryptoFearGreedOutput
 
 logger = logging.getLogger(__name__)
-
-
-async def fetch_json(url: str, headers: dict | None = None) -> dict:
-    """Generic JSON fetcher with retry logic."""
-    from hishel.httpx import AsyncCacheClient
-    
-    async_client = AsyncCacheClient(
-        timeout=30.0,
-        follow_redirects=True,
-        headers=headers,
-    )
-    async with async_client as client:
-        response = await client.get(url)
-        response.raise_for_status()
-        return response.json()
 
 
 class CryptoFearGreedTool(Tool):

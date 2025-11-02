@@ -2,35 +2,14 @@
 
 import logging
 import pandas as pd
-import yfinance as yf
 from concurrent.futures import ThreadPoolExecutor
 from typing import Dict, Any
 
+from ...utils import validate_ticker, yf_call, to_clean_csv
 from ..interfaces.tool import Tool, ToolResponse
 from .models import InstitutionalHoldersInput, InstitutionalHoldersOutput
 
 logger = logging.getLogger(__name__)
-
-
-def validate_ticker(ticker: str) -> str:
-    """Validate and normalize ticker symbol."""
-    ticker = ticker.upper().strip()
-    if not ticker:
-        raise ValueError("Ticker symbol cannot be empty")
-    return ticker
-
-
-def yf_call(ticker: str, method: str, *args, **kwargs):
-    """Generic yfinance API call."""
-    t = yf.Ticker(ticker)
-    return getattr(t, method)(*args, **kwargs)
-
-
-def to_clean_csv(df: pd.DataFrame) -> str:
-    """Clean DataFrame by removing empty columns and convert to CSV string."""
-    mask = (df.notna().any() & (df != '').any() &
-            ((df != 0).any() | (df.dtypes == 'object')))
-    return df.loc[:, mask].fillna('').to_csv(index=False)
 
 
 class InstitutionalHoldersTool(Tool):

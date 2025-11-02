@@ -5,45 +5,12 @@ import pandas as pd
 import yfinance as yf
 from concurrent.futures import ThreadPoolExecutor
 from typing import Dict, Any
-from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception, after_log
-from yfinance.exceptions import YFRateLimitError
 
+from ...utils import validate_ticker, to_clean_csv, api_retry
 from ..interfaces.tool import Tool, ToolResponse
 from .models import FinancialStatementsInput, FinancialStatementsOutput
 
 logger = logging.getLogger(__name__)
-
-
-def validate_ticker(ticker: str) -> str:
-    """Validate and normalize ticker symbol."""
-    ticker = ticker.upper().strip()
-    if not ticker:
-        raise ValueError("Ticker symbol cannot be empty")
-    return ticker
-
-
-def api_retry(func):
-    """Unified retry decorator for API calls."""
-    return retry(
-        stop=stop_after_attempt(3),
-        wait=wait_exponential(multiplier=2.0, min=2.0, max=30.0),
-        retry=retry_if_exception(lambda e:
-            isinstance(e, YFRateLimitError) or
-            (hasattr(e, 'status_code') and getattr(e, 'status_code', 0) >= 500) or
-            any(term in str(e).lower() for term in [
-                "rate limit", "too many requests", "temporarily blocked",
-                "timeout", "connection", "network", "temporary", "5", "429", "502", "503", "504"
-            ])
-        ),
-        after=after_log(logger, logging.WARNING)
-    )(func)
-
-
-def to_clean_csv(df: pd.DataFrame) -> str:
-    """Clean DataFrame by removing empty columns and convert to CSV string."""
-    mask = (df.notna().any() & (df != '').any() &
-            ((df != 0).any() | (df.dtypes == 'object')))
-    return df.loc[:, mask].fillna('').to_csv(index=False)
 
 
 class FinancialStatementsTool(Tool):

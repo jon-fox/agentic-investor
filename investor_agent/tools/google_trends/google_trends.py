@@ -4,32 +4,24 @@ import logging
 import pandas as pd
 from typing import Dict, Any
 
+from ...utils import to_clean_csv
 from ..interfaces.tool import Tool, ToolResponse
 from .models import GoogleTrendsInput, GoogleTrendsOutput
 
 logger = logging.getLogger(__name__)
 
-
-def to_clean_csv(df: pd.DataFrame) -> str:
-    """Convert DataFrame to clean CSV string."""
-    return df.to_csv(index=False)
+# Google Trends timeframe mapping
+TREND_TIMEFRAMES = {
+    1: 'now 1-d', 7: 'now 7-d', 30: 'today 1-m',
+    90: 'today 3-m', 365: 'today 12-m'
+}
 
 
 def get_trends_timeframe(days: int) -> str:
-    """Convert days to Google Trends timeframe string."""
-    if days <= 1:
-        return 'now 1-d'
-    elif days <= 7:
-        return 'now 7-d'
-    elif days <= 30:
-        return 'today 1-m'
-    elif days <= 90:
-        return 'today 3-m'
-    else:
-        # Find the best match among discrete options
-        for threshold, timeframe in [(365 * 5, 'today 5-y'), (365, 'today 12-m')]:
-            if days <= threshold:
-                return timeframe
+    """Get appropriate Google Trends timeframe for given days."""
+    for max_days, timeframe in TREND_TIMEFRAMES.items():
+        if days <= max_days:
+            return timeframe
     return 'today 5-y'
 
 

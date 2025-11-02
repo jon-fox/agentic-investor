@@ -3,25 +3,11 @@
 import logging
 from typing import Dict, Any
 
+from ...utils import fetch_json, BROWSER_HEADERS
 from ..interfaces.tool import Tool, ToolResponse
 from .models import CNNFearGreedInput, CNNFearGreedOutput
 
 logger = logging.getLogger(__name__)
-
-
-async def fetch_json(url: str, headers: dict | None = None) -> dict:
-    """Generic JSON fetcher with retry logic."""
-    from hishel.httpx import AsyncCacheClient
-    
-    async_client = AsyncCacheClient(
-        timeout=30.0,
-        follow_redirects=True,
-        headers=headers,
-    )
-    async with async_client as client:
-        response = await client.get(url)
-        response.raise_for_status()
-        return response.json()
 
 
 class CNNFearGreedTool(Tool):
@@ -51,10 +37,6 @@ class CNNFearGreedTool(Tool):
             A response containing the fear & greed index data
         """
         CNN_FEAR_GREED_URL = "https://production.dataviz.cnn.io/index/fearandgreed/graphdata"
-        
-        BROWSER_HEADERS = {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-        }
 
         raw_data = await fetch_json(CNN_FEAR_GREED_URL, BROWSER_HEADERS)
         if not raw_data:

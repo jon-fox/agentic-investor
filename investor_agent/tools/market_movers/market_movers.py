@@ -5,32 +5,11 @@ import pandas as pd
 from io import StringIO
 from typing import Dict, Any
 
+from ...utils import fetch_text, to_clean_csv
 from ..interfaces.tool import Tool, ToolResponse
 from .models import MarketMoversInput, MarketMoversOutput
 
 logger = logging.getLogger(__name__)
-
-
-async def fetch_text(url: str, headers: dict | None = None) -> str:
-    """Generic text fetcher with retry logic."""
-    from hishel.httpx import AsyncCacheClient
-    
-    async_client = AsyncCacheClient(
-        timeout=30.0,
-        follow_redirects=True,
-        headers=headers,
-    )
-    async with async_client as client:
-        response = await client.get(url)
-        response.raise_for_status()
-        return response.text
-
-
-def to_clean_csv(df: pd.DataFrame) -> str:
-    """Clean DataFrame by removing empty columns and convert to CSV string."""
-    mask = (df.notna().any() & (df != '').any() &
-            ((df != 0).any() | (df.dtypes == 'object')))
-    return df.loc[:, mask].fillna('').to_csv(index=False)
 
 
 class MarketMoversTool(Tool):
