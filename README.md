@@ -156,7 +156,3 @@ See [DEBUG_LOGGING.md](DEBUG_LOGGING.md) for more details on what gets logged an
 ## License
 
 MIT License. See [LICENSE](LICENSE) file for details.
-
-## Credits
-
-This project was originally forked from [agentic-investor](https://github.com/ferdousbhai/agentic-investor). It is intended to diverge and exist as a standalone open source mcp that will have a premium endpoint available.
