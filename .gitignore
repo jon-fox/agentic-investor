@@ -13,7 +13,7 @@
 # Build and distribution
 dist
 yfinance.cache
-investor_agent/_version.py
+agentic_investor/_version.py
 
 # Test files
 test_*.py
