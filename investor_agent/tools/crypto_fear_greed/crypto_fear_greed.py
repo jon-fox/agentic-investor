@@ -12,12 +12,12 @@ logger = logging.getLogger(__name__)
 
 class CryptoFearGreedTool(Tool):
     """Tool that fetches the current Crypto Fear & Greed Index."""
-    
+
     name = "get_crypto_fear_greed_index"
     description = "Get the current Crypto Fear & Greed Index from alternative.me API"
     input_model = CryptoFearGreedInput
     output_model = CryptoFearGreedOutput
-    
+
     def get_schema(self) -> Dict[str, Any]:
         """Get the JSON schema for this tool."""
         return {
@@ -26,13 +26,13 @@ class CryptoFearGreedTool(Tool):
             "input": self.input_model.model_json_schema(),
             "output": self.output_model.model_json_schema(),
         }
-    
+
     async def execute(self, input_data: CryptoFearGreedInput) -> ToolResponse:
         """Execute the crypto fear & greed index tool.
-        
+
         Args:
             input_data: The validated input for the tool
-            
+
         Returns:
             A response containing the index data
         """
@@ -46,6 +46,6 @@ class CryptoFearGreedTool(Tool):
         output = CryptoFearGreedOutput(
             value=current_data["value"],
             classification=current_data["value_classification"],
-            timestamp=current_data["timestamp"]
+            timestamp=current_data["timestamp"],
         )
         return ToolResponse.from_model(output)

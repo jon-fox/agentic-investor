@@ -14,12 +14,12 @@ logger = logging.getLogger(__name__)
 
 class MarketMoversTool(Tool):
     """Tool that fetches market movers (gainers, losers, most active)."""
-    
+
     name = "get_market_movers"
     description = "Get market movers including gainers, losers, and most active stocks. Supports different market sessions."
     input_model = MarketMoversInput
     output_model = MarketMoversOutput
-    
+
     def get_schema(self) -> Dict[str, Any]:
         """Get the JSON schema for this tool."""
         return {
@@ -28,13 +28,13 @@ class MarketMoversTool(Tool):
             "input": self.input_model.model_json_schema(),
             "output": self.output_model.model_json_schema(),
         }
-    
+
     async def execute(self, input_data: MarketMoversInput) -> ToolResponse:
         """Execute the market movers tool.
-        
+
         Args:
             input_data: The validated input for the tool
-            
+
         Returns:
             A response containing the market movers data as CSV
         """
@@ -44,9 +44,9 @@ class MarketMoversTool(Tool):
         YAHOO_AFTER_HOURS_URL = "https://finance.yahoo.com/markets/stocks/after-hours"
         YAHOO_GAINERS_URL = "https://finance.yahoo.com/gainers"
         YAHOO_LOSERS_URL = "https://finance.yahoo.com/losers"
-        
+
         BROWSER_HEADERS = {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
         }
 
         # Validate and constrain count
@@ -71,14 +71,16 @@ class MarketMoversTool(Tool):
         else:
             raise ValueError(f"Invalid category: {input_data.category}")
 
-        logger.info(f"Fetching {input_data.category} ({input_data.market_session} session) from: {url}")
+        logger.info(
+            f"Fetching {input_data.category} ({input_data.market_session} session) from: {url}"
+        )
         response_text = await fetch_text(url, BROWSER_HEADERS)
         tables = pd.read_html(StringIO(response_text))
         if not tables or tables[0].empty:
             raise ValueError(f"No data found for {input_data.category}")
 
-        df = tables[0].loc[:, ~tables[0].columns.str.contains('^Unnamed')]
+        df = tables[0].loc[:, ~tables[0].columns.str.contains("^Unnamed")]
         csv_data = to_clean_csv(df.head(count))
-        
+
         output = MarketMoversOutput(movers_data=csv_data)
         return ToolResponse.from_model(output)

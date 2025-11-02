@@ -11,12 +11,12 @@ logger = logging.getLogger(__name__)
 
 class IntradayDataTool(Tool):
     """Tool that fetches 15-minute historical stock bars using Alpaca API."""
-    
+
     name = "fetch_intraday_data"
     description = "Fetch 15-minute historical stock bars using Alpaca API. Returns timestamp and close price data in EST timezone."
     input_model = IntradayDataInput
     output_model = IntradayDataOutput
-    
+
     def get_schema(self) -> Dict[str, Any]:
         """Get the JSON schema for this tool."""
         return {
@@ -25,13 +25,13 @@ class IntradayDataTool(Tool):
             "input": self.input_model.model_json_schema(),
             "output": self.output_model.model_json_schema(),
         }
-    
+
     async def execute(self, input_data: IntradayDataInput) -> ToolResponse:
         """Execute the intraday data tool.
-        
+
         Args:
             input_data: The validated input for the tool
-            
+
         Returns:
             A response containing intraday data as CSV or error message
         """
@@ -44,36 +44,44 @@ class IntradayDataTool(Tool):
             error_msg = "Alpaca API is not available. Please install alpaca-py package to use this tool: pip install alpaca-py"
             output = IntradayDataOutput(intraday_data=error_msg)
             return ToolResponse.from_model(output)
-        
+
         import os
 
         try:
-            api_key = os.getenv('ALPACA_API_KEY')
-            api_secret = os.getenv('ALPACA_API_SECRET')
+            api_key = os.getenv("ALPACA_API_KEY")
+            api_secret = os.getenv("ALPACA_API_SECRET")
 
             if not api_key or not api_secret:
-                raise ValueError("ALPACA_API_KEY and ALPACA_API_SECRET environment variables must be set")
+                raise ValueError(
+                    "ALPACA_API_KEY and ALPACA_API_SECRET environment variables must be set"
+                )
 
             timeframe = TimeFrame(15, TimeFrameUnit.Minute)
             client = StockHistoricalDataClient(api_key, api_secret)
             request = StockBarsRequest(
                 symbol_or_symbols=input_data.stock,
                 timeframe=timeframe,
-                limit=input_data.window
+                limit=input_data.window,
             )
 
             df_raw = client.get_stock_bars(request).df
 
-            if df_raw.empty or 'close' not in df_raw.columns:
-                raise ValueError(f"'close' column missing or data empty for {input_data.stock}")
+            if df_raw.empty or "close" not in df_raw.columns:
+                raise ValueError(
+                    f"'close' column missing or data empty for {input_data.stock}"
+                )
 
-            df = df_raw['close']
-            df.index = df_raw.index.get_level_values('timestamp').tz_convert("America/New_York")
-            df = df.to_frame(name=f'{input_data.stock}')
+            df = df_raw["close"]
+            df.index = df_raw.index.get_level_values("timestamp").tz_convert(
+                "America/New_York"
+            )
+            df = df.to_frame(name=f"{input_data.stock}")
 
             # Convert to CSV string
             df_reset = df.reset_index()
-            df_reset['timestamp'] = df_reset['timestamp'].dt.strftime('%Y-%m-%d %H:%M:%S %Z')
+            df_reset["timestamp"] = df_reset["timestamp"].dt.strftime(
+                "%Y-%m-%d %H:%M:%S %Z"
+            )
             csv_data = df_reset.to_csv(index=False)
 
             output = IntradayDataOutput(intraday_data=csv_data)

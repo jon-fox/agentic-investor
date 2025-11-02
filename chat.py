@@ -10,16 +10,19 @@ logger = logging.getLogger(__name__)
 
 load_dotenv()
 
-model_identifier = os.getenv('MODEL_IDENTIFIER', 'openai:gpt-5-mini')
+model_identifier = os.getenv("MODEL_IDENTIFIER", "openai:gpt-5-mini")
 
 logger.info(f"Creating agent with model: {model_identifier}")
 
 try:
     server = MCPServerStdio(
-        'uv', args=['run', 'agentic-investor', 'stdio'], timeout=60, env=dict(os.environ)
+        "uv",
+        args=["run", "agentic-investor", "stdio"],
+        timeout=60,
+        env=dict(os.environ),
     )
     agent = Agent(model_identifier, toolsets=[server])
-    agent.set_mcp_sampling_model() # Allows MCP server to make LLM calls via the MCP client
+    agent.set_mcp_sampling_model()  # Allows MCP server to make LLM calls via the MCP client
 
     logger.info("Agent created successfully")
 except Exception as e:
@@ -35,14 +38,17 @@ async def main():
         while True:
             try:
                 user_input = input("\n👤: ").strip()
-                if user_input.lower() in ['quit', 'exit', 'q']:
+                if user_input.lower() in ["quit", "exit", "q"]:
                     logger.info("Chat session ended by user")
                     break
                 if not user_input:
                     continue
 
                 logger.debug(f"Processing user input: {user_input}")
-                result = await agent.run(user_input, message_history=result.new_messages() if result else None)
+                result = await agent.run(
+                    user_input,
+                    message_history=result.new_messages() if result else None,
+                )
                 print(f"🤖: {result.output}")
 
             except (KeyboardInterrupt, EOFError):

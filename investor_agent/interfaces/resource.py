@@ -27,10 +27,14 @@ class ResourceContent(BaseModel):
     text: Optional[str] = Field(None, description="Text content when type='text'")
 
     # JSON content (for structured data)
-    json_data: Optional[Dict[str, Any]] = Field(None, description="JSON data when type='json'")
+    json_data: Optional[Dict[str, Any]] = Field(
+        None, description="JSON data when type='json'"
+    )
 
     # Model content (will be converted to json_data during serialization)
-    model: Optional[Any] = Field(None, exclude=True, description="Pydantic model instance")
+    model: Optional[Any] = Field(
+        None, exclude=True, description="Pydantic model instance"
+    )
 
     # Resource-specific fields
     uri: Optional[str] = Field(None, description="URI of the resource")
@@ -65,10 +69,16 @@ class ResourceResponse(BaseModel):
         Returns:
             A ResourceResponse with the model data in JSON format
         """
-        return cls(content=[ResourceContent(type="json", json_data=model.model_dump(), model=model)])
+        return cls(
+            content=[
+                ResourceContent(type="json", json_data=model.model_dump(), model=model)
+            ]
+        )
 
     @classmethod
-    def from_text(cls, text: str, uri: Optional[str] = None, mime_type: Optional[str] = None) -> "ResourceResponse":
+    def from_text(
+        cls, text: str, uri: Optional[str] = None, mime_type: Optional[str] = None
+    ) -> "ResourceResponse":
         """Create a ResourceResponse from plain text.
 
         Args:
@@ -79,7 +89,11 @@ class ResourceResponse(BaseModel):
         Returns:
             A ResourceResponse with text content
         """
-        return cls(content=[ResourceContent(type="text", text=text, uri=uri, mime_type=mime_type)])
+        return cls(
+            content=[
+                ResourceContent(type="text", text=text, uri=uri, mime_type=mime_type)
+            ]
+        )
 
 
 class Resource(ABC):

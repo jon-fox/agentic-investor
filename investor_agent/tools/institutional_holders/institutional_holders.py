@@ -14,12 +14,14 @@ logger = logging.getLogger(__name__)
 
 class InstitutionalHoldersTool(Tool):
     """Tool that fetches major institutional and mutual fund holders."""
-    
+
     name = "get_institutional_holders"
-    description = "Get major institutional and mutual fund holders with their share positions"
+    description = (
+        "Get major institutional and mutual fund holders with their share positions"
+    )
     input_model = InstitutionalHoldersInput
     output_model = InstitutionalHoldersOutput
-    
+
     def get_schema(self) -> Dict[str, Any]:
         """Get the JSON schema for this tool."""
         return {
@@ -28,13 +30,13 @@ class InstitutionalHoldersTool(Tool):
             "input": self.input_model.model_json_schema(),
             "output": self.output_model.model_json_schema(),
         }
-    
+
     async def execute(self, input_data: InstitutionalHoldersInput) -> ToolResponse:
         """Execute the institutional holders tool.
-        
+
         Args:
             input_data: The validated input for the tool
-            
+
         Returns:
             A response containing institutional and mutual fund holder data
         """
@@ -49,10 +51,20 @@ class InstitutionalHoldersTool(Tool):
             fund_holders = fund_future.result()
 
         # Limit results
-        inst_holders = inst_holders.head(input_data.top_n) if isinstance(inst_holders, pd.DataFrame) else None
-        fund_holders = fund_holders.head(input_data.top_n) if isinstance(fund_holders, pd.DataFrame) else None
+        inst_holders = (
+            inst_holders.head(input_data.top_n)
+            if isinstance(inst_holders, pd.DataFrame)
+            else None
+        )
+        fund_holders = (
+            fund_holders.head(input_data.top_n)
+            if isinstance(fund_holders, pd.DataFrame)
+            else None
+        )
 
-        if (inst_holders is None or inst_holders.empty) and (fund_holders is None or fund_holders.empty):
+        if (inst_holders is None or inst_holders.empty) and (
+            fund_holders is None or fund_holders.empty
+        ):
             raise ValueError(f"No institutional holder data found for {ticker}")
 
         result = {"ticker": ticker, "top_n": input_data.top_n}

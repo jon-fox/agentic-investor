@@ -27,10 +27,14 @@ class PromptContent(BaseModel):
     text: Optional[str] = Field(None, description="Text content when type='text'")
 
     # JSON content (for structured data)
-    json_data: Optional[Dict[str, Any]] = Field(None, description="JSON data when type='json'")
+    json_data: Optional[Dict[str, Any]] = Field(
+        None, description="JSON data when type='json'"
+    )
 
     # Model content (will be converted to json_data during serialization)
-    model: Optional[Any] = Field(None, exclude=True, description="Pydantic model instance")
+    model: Optional[Any] = Field(
+        None, exclude=True, description="Pydantic model instance"
+    )
 
     def model_post_init(self, __context: Any) -> None:
         """Post-initialization hook to handle model conversion."""
@@ -59,7 +63,11 @@ class PromptResponse(BaseModel):
         Returns:
             A PromptResponse with the model data in JSON format
         """
-        return cls(content=[PromptContent(type="json", json_data=model.model_dump(), model=model)])
+        return cls(
+            content=[
+                PromptContent(type="json", json_data=model.model_dump(), model=model)
+            ]
+        )
 
     @classmethod
     def from_text(cls, text: str) -> "PromptResponse":

@@ -28,7 +28,9 @@ class PromptService:
             raise ValueError(f"Prompt not found: {prompt_name}")
         return self._prompts[prompt_name]
 
-    async def generate_prompt(self, prompt_name: str, input_data: Dict[str, Any]) -> PromptResponse:
+    async def generate_prompt(
+        self, prompt_name: str, input_data: Dict[str, Any]
+    ) -> PromptResponse:
         """Execute a prompt by name with given arguments.
 
         This validates the input against the prompt's input model and calls
@@ -41,7 +43,9 @@ class PromptService:
 
         return await prompt.generate(input_model)
 
-    def _process_prompt_content(self, content: PromptContent) -> str | Dict[str, Any] | None:
+    def _process_prompt_content(
+        self, content: PromptContent
+    ) -> str | Dict[str, Any] | None:
         """Process a PromptContent object into a serializable form."""
         if content.type == "text":
             return content.text
@@ -91,11 +95,17 @@ class PromptService:
 
                     input_data = dict(bound_args.arguments)
                     logger = logging.getLogger("example_mcp_server.prompt_service")
-                    logger.debug("Received input_data for prompt '%s': %s", prompt.name, input_data)
+                    logger.debug(
+                        "Received input_data for prompt '%s': %s",
+                        prompt.name,
+                        input_data,
+                    )
 
                     # Validate the input using the Pydantic model
                     input_model = prompt.input_model.model_validate(input_data)
-                    result = await self.generate_prompt(prompt.name, input_model.model_dump())
+                    result = await self.generate_prompt(
+                        prompt.name, input_model.model_dump()
+                    )
                     return self._serialize_response(result)
 
                 # Set the signature and metadata on the handler
@@ -105,7 +115,8 @@ class PromptService:
 
                 # Set annotations
                 handler.__annotations__ = {
-                    field_name: field_info.annotation for field_name, field_info in input_fields.items()
+                    field_name: field_info.annotation
+                    for field_name, field_info in input_fields.items()
                 }
                 handler.__annotations__["return"] = Any
 

@@ -21,25 +21,27 @@ mcp = FastMCP("Agentic-Investor", dependencies=["yfinance", "pandas", "pytrends"
 
 # Initialize tool service and register tools
 tool_service = ToolService()
-tool_service.register_tools([
-    CryptoFearGreedTool(),
-    GoogleTrendsTool(),
-    MarketMoversTool(),
-    CNNFearGreedTool(),
-    TickerDataTool(),
-    OptionsTool(),
-    PriceHistoryTool(),
-    FinancialStatementsTool(),
-    EarningsHistoryTool(),
-    InsiderTradesTool(),
-    InstitutionalHoldersTool(),
-    NasdaqEarningsCalendarTool(),
-    IntradayDataTool(),
-    TechnicalIndicatorsTool(),
-])
+tool_service.register_tools(
+    [
+        CryptoFearGreedTool(),
+        GoogleTrendsTool(),
+        MarketMoversTool(),
+        CNNFearGreedTool(),
+        TickerDataTool(),
+        OptionsTool(),
+        PriceHistoryTool(),
+        FinancialStatementsTool(),
+        EarningsHistoryTool(),
+        InsiderTradesTool(),
+        InstitutionalHoldersTool(),
+        NasdaqEarningsCalendarTool(),
+        IntradayDataTool(),
+        TechnicalIndicatorsTool(),
+    ]
+)
 
 # Configure pandas
-pd.set_option('future.no_silent_downcasting', True)
+pd.set_option("future.no_silent_downcasting", True)
 
 # Register tools with MCP
 tool_service.register_mcp_handlers(mcp)
